@@ -1,0 +1,41 @@
+{
+	"$schema": "https://sellsn.io/schemas/paymentIntegration.v1.json",
+	"name": "Example",
+	"id": "example",
+	"version": "1.0.0",
+	"description": "This is an example payment integration built for SellSN designed for testing and reference.",
+	"author": "https://github.com/Sellsn-Platform/payment-example",
+	"metadata": {
+		"apiKey": "testapikey"
+	},
+	"webhook": {
+		"secret": "testwebhooksignature",
+		"headerName": "X-Webhook-Signature"
+	},
+	"definitions": [
+		{
+			"id": "identify",
+			"url": "http://localhost:5173/api/identify",
+			"method": "POST",
+			"headers": {
+				"Authorization": "{{metadata.apiKey}}"
+			}
+		},
+		{
+			"id": "createOrder",
+			"url": "http://localhost:5173/api/createOrder",
+			"method": "POST",
+			"headers": {
+				"Authorization": "{{metadata.apiKey}}"
+			}
+		},
+		{
+			"id": "getOrder",
+			"url": "http://localhost:5173/api/getOrder/{{request.id}}",
+			"method": "GET",
+			"headers": {
+				"Authorization": "{{metadata.apiKey}}"
+			}
+		}
+	]
+}
