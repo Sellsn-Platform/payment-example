@@ -80,7 +80,7 @@ export interface IntegrationOrderResponse {
 	 * The ID of the order on your platform, SellSN will attach this to the order and use it in
 	 * the order status endpoint and to help identify them on your own platform.
 	 */
-	orderId: string;
+	id: string;
 	/**
 	 * The URL the customer should go to in-order to complete the payment.
 	 */

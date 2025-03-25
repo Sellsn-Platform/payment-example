@@ -1,4 +1,5 @@
 import type { IntegrationOrderRequest } from './sellsn';
+import crypto from 'crypto';
 
 /**
  * This is a simple in-memory database for the demo.
@@ -16,6 +17,7 @@ export interface User {
 	email: string;
 	name: string;
 	apiKey: string;
+	webhookSecret: string;
 	sellsnUserId?: string;
 }
 
@@ -25,9 +27,14 @@ const users: User[] = [
 		id: '1',
 		email: 'test@example.com',
 		apiKey: 'testapikey',
-		name: 'Test User'
+		name: 'Test User',
+		webhookSecret: 'testwebhooksignature'
 	}
 ];
+
+function generateHmacSignature(body: string, secret: string): string {
+	return crypto.createHmac('sha256', secret).update(body).digest('hex'); // <- HEX encoded!
+}
 
 export function getOrder(orderId: string): IntegrationOrderRequest | undefined {
 	return orders.find((order) => order.orderId === orderId);
@@ -60,4 +67,30 @@ export function deleteUser(userId: string) {
 		return;
 	}
 	users.splice(index, 1);
+}
+
+export async function sendWebhook(order: IntegrationOrderRequest) {
+	// The 1 is the USER ID on SELLSN, you should've binded it to the user properly
+	const user = getUser('1'); // Hardcoded cus lazy
+	console.log(user);
+	const url = `http://localhost:5140/user/customPaymentIntegration/webhook/${user?.sellsnUserId}`;
+	const body = {
+		orderId: order.orderId,
+		status: 'Delivered',
+		amountPaid: order.cost,
+		paymentMethod: 'example' // payment method ID, this is present in your INTEGRATION SCHEMA
+	};
+
+	const json = JSON.stringify(body);
+
+	await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Webhook-Signature': generateHmacSignature(json, user?.webhookSecret || '')
+		},
+		body: json
+	});
+
+	console.log('Webhook sent');
 }

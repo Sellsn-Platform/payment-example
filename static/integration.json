@@ -15,7 +15,7 @@
 	"definitions": [
 		{
 			"id": "identify",
-			"url": "http://localhost:5173/api/identify",
+			"url": "http://localhost:5170/api/identify",
 			"method": "POST",
 			"headers": {
 				"Authorization": "{{metadata.apiKey}}"
@@ -23,7 +23,7 @@
 		},
 		{
 			"id": "createOrder",
-			"url": "http://localhost:5173/api/createOrder",
+			"url": "http://localhost:5170/api/createOrder",
 			"method": "POST",
 			"headers": {
 				"Authorization": "{{metadata.apiKey}}"
@@ -31,7 +31,7 @@
 		},
 		{
 			"id": "getOrder",
-			"url": "http://localhost:5173/api/getOrder/{{request.id}}",
+			"url": "http://localhost:5170/api/getOrder/{{request.id}}",
 			"method": "GET",
 			"headers": {
 				"Authorization": "{{metadata.apiKey}}"

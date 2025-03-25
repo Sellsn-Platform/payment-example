@@ -28,8 +28,8 @@ export const POST: RequestHandler = async ({ request }) => {
 	createOrder(data);
 
 	const result: IntegrationOrderResponse = {
-		orderId: data.orderId,
-		link: `http://localhost:5173/checkout/${data.orderId}`
+		id: data.orderId,
+		link: `http://localhost:5170/checkout/${data.orderId}`
 	};
 
 	return new Response(JSON.stringify(result), {
